@@ -54,6 +54,10 @@ public class CountryPickerView: NibView {
         didSet { setup() }
     }
     
+    public var showCountryNameInView = true {
+        didSet { setup() }
+    }
+    
     // Show/Hide the phone code on the view.
     public var showPhoneCodeInView = true {
         didSet { setup() }
@@ -109,6 +113,12 @@ public class CountryPickerView: NibView {
         flagImageView.image = selectedCountry.flag
         countryDetailsLabel.font = font
         countryDetailsLabel.textColor = textColor
+        
+        if showCountryNameInView && showPhoneCodeInView{
+            countryDetailsLabel.text = "(\(selectedCountry.name)) \(selectedCountry.phoneCode)"
+            return
+        }
+        
         if showPhoneCodeInView && showCountryCodeInView {
             countryDetailsLabel.text = "(\(selectedCountry.code)) \(selectedCountry.phoneCode)"
             return
