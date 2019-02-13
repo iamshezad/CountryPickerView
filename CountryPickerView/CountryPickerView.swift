@@ -49,12 +49,16 @@ public class CountryPickerView: NibView {
     }
     @IBOutlet public weak var countryDetailsLabel: UILabel!
     
+    // Show/Present countryPickerViewController.
+    public var showList = false
+
     // Show/Hide the country code on the view.
     public var showCountryCodeInView = true {
         didSet { setup() }
     }
     
-    public var showCountryNameInView = true {
+    // Show/Hide the country name on the view.
+    public var showCountryNameInView = false {
         didSet { setup() }
     }
     
@@ -146,7 +150,14 @@ public class CountryPickerView: NibView {
     public func showCountriesList(from viewController: UIViewController) {
         let countryVc = CountryPickerViewController(style: .grouped)
         countryVc.countryPickerView = self
-        if let viewController = viewController as? UINavigationController {
+        
+        if !showList{
+            let navigationVC = UINavigationController(rootViewController: countryVc)
+            delegate?.countryPickerView(self, willShow: countryVc)
+            viewController.present(navigationVC, animated: true) {
+                self.delegate?.countryPickerView(self, didShow: countryVc)
+            }
+        }else if let viewController = viewController as? UINavigationController{
             delegate?.countryPickerView(self, willShow: countryVc)
             viewController.pushViewController(countryVc, animated: true) {
                 self.delegate?.countryPickerView(self, didShow: countryVc)
